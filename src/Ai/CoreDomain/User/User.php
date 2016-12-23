@@ -253,9 +253,9 @@ class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPassword(): string
+    public function getPassword()
     {
         return $this->password;
     }

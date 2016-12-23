@@ -44,7 +44,7 @@ class User extends \Ai\CoreDomain\User\User implements UserInterface
     /**
      * @inheritDoc
      */
-    public function getPassword(): string
+    public function getPassword()
     {
         return parent::getPassword();
     }

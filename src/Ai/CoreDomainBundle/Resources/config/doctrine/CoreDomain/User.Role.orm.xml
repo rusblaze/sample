@@ -5,7 +5,7 @@
         http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Ai\CoreDomain\User\Role" table="roles">
         <id name="role" type="string" column="id" />
-        <field name="default" type="boolean" nullable="false" >
+        <field name="default" type="boolean" nullable="false" column="`default`" >
             <options>
                 <option name="comment">Flag for marking role as default</option>
                 <option name="default">0</option>

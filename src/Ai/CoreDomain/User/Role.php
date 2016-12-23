@@ -19,12 +19,12 @@ class Role implements RoleInterface
     /**
      * @var string
      */
-    private $role;
+    protected $role;
 
     /**
      * @var bool
      */
-    private $default;
+    private $default = false;
 
     /**
      * @var User[]

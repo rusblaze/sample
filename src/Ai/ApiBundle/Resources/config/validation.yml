@@ -1,6 +1,38 @@
 Ai\CoreDomainBundle\Entity\User:
     properties:
         email:
+            - NotBlank:
+                groups: [common_user]
+                message: 'E-mail is mandatory'
             - Email:
+                groups: [common_user]
                 message: The email "{{ value }}" is not a valid email.
                 checkMX: false
+        firstName:
+            - Length:
+                groups: [common_user]
+                min: 1
+                max: 150
+                minMessage: 'First name must be at least {{ limit }} characters long'
+                maxMessage: 'First name cannot be longer than {{ limit }} characters'
+        lastName:
+            - Length:
+                groups: [common_user]
+                min: 1
+                max: 150
+                minMessage: 'Last name must be at least {{ limit }} characters long'
+                maxMessage: 'Lirst name cannot be longer than {{ limit }} characters'
+        password:
+            - Length:
+                groups: [common_user]
+                min: 6
+                max: 150
+                minMessage: 'Password must be at least {{ limit }} characters long'
+                maxMessage: 'Password cannot be longer than {{ limit }} characters'
+
+Ai\CoreDomain\User\Role:
+    properties:
+        role:
+            - Regex:
+                pattern: '/^ROLE_[A-Z]+$/'
+                message: Role should be written with capital chars only and should be prefixed with "ROLE_"

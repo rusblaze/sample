@@ -7,13 +7,17 @@
  */
 namespace Ai\ApiBundle\Service;
 
-use Ai\CoreDomain\User\Exception\BadCreateUserDataException;
-use Ai\CoreDomain\User\Exception\RoleNotFoundException;
-use Ai\CoreDomain\User\Exception\UserNotFoundException;
-use Ai\CoreDomain\User\Role;
-use Ai\CoreDomain\User\RoleRepositoryInterface;
-use Ai\CoreDomain\User\UserId;
-use Ai\CoreDomain\User\UserRepositoryInterface;
+use Ai\CoreDomain\User\Exception\{
+    BadCreateUserDataException,
+    RoleNotFoundException,
+    UserNotFoundException
+};
+use Ai\CoreDomain\User\{
+    Role,
+    RoleRepositoryInterface,
+    UserId,
+    UserRepositoryInterface
+};
 use Ai\CoreDomainBundle\Entity\User;
 use Ramsey\Uuid\Uuid;
 
@@ -55,7 +59,7 @@ class UserService
      */
     public function updateUsersList(array $newUsersList): array
     {
-        $this->userRepository->markForDeleting();
+        //$this->userRepository->markForDeleting();
         $errors = [];
         foreach ($newUsersList as $newUser) {
             try {
@@ -77,6 +81,7 @@ class UserService
                     $errors[$newUser->getEmail()] = new BadCreateUserDataException(
                         'No password supplied for newly created user'
                     );
+                    continue;
                 }
                 $userId = new UserId(Uuid::uuid4()->toString());
                 try {
@@ -110,7 +115,7 @@ class UserService
                 $this->userRepository->update($existingUser);
             }
         }
-        $this->userRepository->removeMarked();
+        //$this->userRepository->removeMarked();
         return $errors;
     }
 

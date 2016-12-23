@@ -99,7 +99,9 @@ class UserController extends SecuredControllerAbstract
         $inputData = $request->request->all();
         $users = [];
         foreach($request->request->all() as $userData) {
-            if (!is_null($userData['role']) && $userData['role'] != '') {
+            if (!isset($userData['role'])) {
+                $userData['role'] = null;
+            } else if (!is_null($userData['role']) && $userData['role'] != '') {
                 $userData['role'] = ['role' => $userData['role']];
             } else {
                 unset($userData['role']);
@@ -110,7 +112,11 @@ class UserController extends SecuredControllerAbstract
             );
         }
 
-        $validationErrors = $validator->validate($users, null);
+        $validationErrors = $validator->validate($users);
+
+        foreach ($users as $user) {
+            $validationErrors->addAll($validator->validate($user->getRole()));
+        }
         if (count($validationErrors) > 0) {
             $errors = [];
             /*

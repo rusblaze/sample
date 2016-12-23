@@ -1,0 +1,57 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <mapped-superclass name="Ai\CoreDomain\User\User">
+        <id name="id" type="UserId" column="id" />
+        <field name="password" type="string" nullable="false" length="250">
+            <options>
+                <option name="comment">password</option>
+            </options>
+        </field>
+        <field name="email" type="string" nullable="false" length="250" unique="true">
+            <options>
+                <option name="comment">E-mail address (should be unique)</option>
+            </options>
+        </field>
+        <field name="deleted" type="boolean" nullable="false" >
+            <options>
+                <option name="comment">Flag for marking user as deleted</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="createdAt" type="datetime" nullable="false" >
+            <options>
+                <option name="comment">Timestamp of user registration (UTC)</option>
+            </options>
+        </field>
+        <field name="deletedAt" type="datetime" nullable="true" >
+            <options>
+                <option name="comment">Timestamp of user deletion (UTC)</option>
+            </options>
+        </field>
+        <field name="firstName" type="string" nullable="true" length="250">
+            <options>
+                <option name="comment">User first name</option>
+            </options>
+        </field>
+        <field name="lastName" type="string" nullable="true" length="250">
+            <options>
+                <option name="comment">User last name</option>
+            </options>
+        </field>
+        <field name="potentialDeleted" type="boolean" nullable="false" column="potential_deleted" >
+            <options>
+                <option name="comment">Flag used for marking user as potentially deleted while full updating</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-one field="role" target-entity="Role" inversed-by="users">
+            <join-column name="role" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+        <indexes>
+            <index columns="deleted" />
+            <index columns="potential_deleted" />
+        </indexes>
+    </mapped-superclass>
+</doctrine-mapping>

@@ -1,0 +1,40 @@
+Ai\CoreDomain\User\User:
+    exclusion_policy: ALL
+    properties:
+        firstName:
+            groups:
+                - import
+                - export
+                - session
+            expose: true
+            serialized_name: first_name
+            type: string
+        lastName:
+            groups:
+                - import
+                - export
+                - session
+            expose: true
+            serialized_name: last_name
+            type: string
+        email:
+            groups:
+                - import
+                - export
+                - session
+            expose: true
+            serialized_name: email
+            type: string
+        role:
+            groups:
+                - import
+                - export
+            expose: true
+            inline: true
+            type: Ai\CoreDomain\User\Role
+        password:
+            groups:
+                - import
+            expose: true
+            serialized_name: password
+            type: string

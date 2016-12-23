@@ -1,0 +1,6 @@
+services:
+    ai.api.user_service:
+        class: Ai\ApiBundle\Service\UserService
+        arguments:
+            - "@user_repository"
+            - "@role_repository"

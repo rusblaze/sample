@@ -1,0 +1,156 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: en
+
+framework:
+    #esi:             ~
+    #translator:      { fallbacks: ["%locale%"] }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    #serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  null
+    fragments:       ~
+    http_method_override: true
+    assets: ~
+    php_errors:
+        log: true
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   pdo_mysql
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #     path:     "%database_path%"
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Application\Migrations
+    table_name: migration_versions
+    name: Application Migrations
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    spool:     { type: memory }
+
+sensio_framework_extra:
+    request: { converters: true }
+
+fos_rest:
+    disable_csrf_role:    null
+    format_listener:
+        enabled: true
+        rules:
+            - { path: '^/v1/user$', priorities: [ 'csv', 'json', 'html'], fallback_format: html, prefer_extension: false }
+            - { path: '^/', priorities: ['json', 'xml'], fallback_format: json, prefer_extension: false }
+    cache_dir:            '%kernel.cache_dir%/fos_rest'
+    body_converter:
+        enabled:              true
+        validate:             false
+        validation_errors_argument:  validationErrors
+    service:
+        router:               router
+        templating:           templating
+        view_handler:         ai.view_handler
+        inflector:            fos_rest.inflector.doctrine
+        validator:            validator
+    serializer:
+        version:              null
+        groups:               []
+        serialize_null:       true
+    view:
+        mime_types:
+            enabled:              true
+            formats:
+                json: ['application/json', 'application/x-json', 'application/vnd.example-com.foo+json']
+                xml: ['application/xml', 'text/xml']
+                csv: ['text/csv']
+                html: ['text/plain']
+        formats:
+            json: true
+            xml: true
+            csv: true
+            text: true
+        view_response_listener:
+            enabled:              true
+            force:                true
+            service:              null
+        templating_formats:
+            csv: false
+            html: true
+        failed_validation:    400
+        empty_content:        204
+        serialize_null:       true
+    body_listener:
+        enabled:              true
+        decoders:
+            csv: ai.decoder.csv
+        throw_exception_on_unsupported_content_type:  false
+    versioning:
+        enabled: true
+
+jms_serializer:
+    property_naming:
+        separator: '_'
+        lower_case: true
+        enable_cache: false
+    metadata:
+        auto_detection: false
+        infer_types_from_doctrine_metadata: false
+        cache: none
+        directories:
+#          ApiDomain:
+#            namespace_prefix: "Ai\\ApiBundle"
+#            path: "@AiApiBundle/Resources/config/serializer/"
+          CoreDomain:
+            namespace_prefix: "Ai\\CoreDomain"
+            path: "@AiApiBundle/Resources/config/serializer/"
+          CoreDomainBundle:
+            namespace_prefix: "Ai\\CoreDomainBundle"
+            path: "@AiApiBundle/Resources/config/serializer/"
+
+ai_core_domain:
+    session_token_authenticator:
+        token_source: 'header'
+        header_name: 'X-AUTH-SESSION'

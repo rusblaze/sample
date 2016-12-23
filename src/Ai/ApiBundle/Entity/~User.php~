@@ -1,0 +1,97 @@
+<?php
+// User.php
+/**
+ * User: aivanov
+ * Date: 20.12.16
+ * Time: 11:44
+ */
+namespace Ai\ApiBundle\Entity;
+
+use Swagger\Annotations as SWG;
+use Ai\CoreDomain\User\User as UserEntity;
+
+/**
+ * Class User
+ * @package Ai\ApiBundle\Entity
+ * @SWG\Definition(
+ *   definition="ExistingUser",
+ *   type="object"
+ * )
+ */
+class User
+{
+    /**
+     * @var string
+     * @SWG\Property(type="string")
+     */
+    private $email;
+
+    /**
+     * @var string
+     * @SWG\Property(
+     *     property="first_name"
+     * )
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     */
+    private $id;
+
+    /**
+     * @var string
+     * @SWG\Property(
+     *     property="last_name",
+     *     type="string"
+     * )
+     */
+    private $lastName;
+
+    /**
+     * @var string
+     * @SWG\Property(
+     *   property="role",
+     *   type="string",
+     *   description="User role",
+     *   enum={"ADMIN","USER"}
+     * )
+     */
+    private $role;
+
+    /**
+     * Timestamp of user registration (UTC)
+     *
+     * @var \DateTime
+     */
+    private $createdAt;
+
+    /**
+     * @var string|null
+     */
+    private $password;
+
+    public function __construct(UserEntity $user)
+    {
+        $this->email = $user->getEmail();
+        $this->firstName = $user->getFirstName();
+        $this->id = $user->getId()->getValue();
+        $this->lastName = $user->getLastName();
+        $this->role = $user->getRole()->getRole();
+        $this->createdAt = $user->getCreatedAt();
+    }
+}
+
+/**
+ * @SWG\Definition(
+ *   definition="UpdateUser",
+ *   type="object",
+ *   allOf={
+ *     @SWG\Schema(ref="#/definitions/ExistingUser"),
+ *     @SWG\Schema(
+ *        required={"email"},
+ *        @SWG\Property(property="password", type="password")
+ *     )
+ *   }
+ * )
+ */

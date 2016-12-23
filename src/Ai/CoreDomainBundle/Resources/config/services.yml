@@ -1,0 +1,36 @@
+services:
+    ai.view_handler.csv:
+        class: Ai\CoreDomainBundle\View\CsvViewHandler
+    ai.view_handler:
+        parent: fos_rest.view_handler.default
+        calls:
+            - ['registerHandler', ['csv', ['@ai.view_handler.csv', 'createResponse']]]
+    ai.decoder.csv:
+        class: Ai\CoreDomainBundle\Decoder\DecoderCsv
+        arguments:
+            - '@jms_serializer'
+    ai_core_domain.api_user_provider:
+        class: Ai\CoreDomainBundle\Security\SessionUserProvider
+        arguments:
+          - "@user_repository"
+    ai_core_domain.api_user_authenticator:
+        class:     Ai\CoreDomainBundle\Security\SessionUserAuthenticator
+        arguments: ["@security.password_encoder"]
+doctrine:
+    dbal:
+        types:
+            UserId:
+                class: Ai\CoreDomainBundle\Types\Doctrine\UserId
+    orm:
+        mappings:
+            # An array of mappings, which may be a bundle name or something else
+            AiCoreDomainBundle:
+                type:                 xml
+                dir: '%kernel.root_dir%/../src/Ai/CoreDomainBundle/Resources/config/doctrine/CoreDomainBundle'
+                prefix: 'Ai\CoreDomainBundle\Entity'
+                is_bundle: false
+            AiCoreDomain:
+                type:                 xml
+                dir: '%kernel.root_dir%/../src/Ai/CoreDomainBundle/Resources/config/doctrine/CoreDomain'
+                prefix: 'Ai\CoreDomain'
+                is_bundle: false

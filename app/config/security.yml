@@ -1,0 +1,45 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/security.html
+security:
+
+    # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    providers:
+        ai_core_domain.api_provider:
+            id: ai_core_domain.api_user_provider
+    encoders:
+        Ai\CoreDomain\User\User: bcrypt
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        logging_in:
+            pattern: ^/v1/session?
+            methods: [PUT]
+            guard:
+                authenticators:
+                    - ai_core_domain.login_authenticator
+            stateless: true
+        api:
+            pattern: ^/v1/(user|comment|session)/?
+            methods: [GET,POST,DELETE]
+            guard:
+                authenticators:
+                    - ai_core_domain.session_token_authenticator
+            stateless: true
+        default:
+            anonymous: ~
+            # activate different ways to authenticate
+
+            # http_basic: ~
+            # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: ~
+            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+    access_control:
+        - { path: ^/v1/session, methods: [PUT], roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/v1/(user|comment|session)/?, methods: [GET,POST,DELETE], roles: [ROLE_USER] }
+        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }

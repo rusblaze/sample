@@ -1,0 +1,21 @@
+ai_api.session_get:
+    path:  /{version}/session
+    defaults: { _controller: AiApiBundle:Session:session }
+    methods: [GET]
+ai_api.session_start:
+    path:  /{version}/session
+    defaults: { _controller: AiApiBundle:Session:login }
+    methods: [PUT]
+ai_api.session_end:
+    path:  /{version}/session
+    defaults: { _controller: AiApiBundle:Session:logout }
+    methods: [DELETE]
+
+ai_api.user_export_all:
+    path:  /{version}/user
+    defaults: { _controller: AiApiBundle:User:export }
+    methods: [GET]
+ai_api.user_update_all:
+    path:  /{version}/user
+    defaults: { _controller: AiApiBundle:User:update }
+    methods: [POST]

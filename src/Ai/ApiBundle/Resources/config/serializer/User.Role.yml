@@ -1,0 +1,10 @@
+Ai\CoreDomain\User\Role:
+    exclusion_policy: ALL
+    properties:
+        role:
+            groups:
+                - import
+                - export
+            expose: true
+            serialized_name: role
+            type: string

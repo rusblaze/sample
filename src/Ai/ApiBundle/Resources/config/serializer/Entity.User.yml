@@ -1,0 +1,9 @@
+Ai\CoreDomainBundle\Entity\User:
+    exclusion_policy: ALL
+    properties:
+        sessionToken:
+            groups:
+                - session
+            expose: true
+            serialized_name: token
+            type: string
